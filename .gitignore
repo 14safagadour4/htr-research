@@ -1,0 +1,22 @@
+# Virtual environments
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Data (too large for git)
+data/
+
+# Model checkpoints
+runs/
+*.pth
+*.pt
+*.keras
+*.h5
+*.blob
+
+# OS files
+.DS_Store
