@@ -1,0 +1,20 @@
+Paper Reading Notes — Attention Is All You Need
+
+3.1 Encoder:
+Stack of 6 identical layers. Each has two sublayers: multi-head self-attention and feed-forward. Residual connections and layer normalization wrap each sublayer. Output dimension stays at d_model = 512.
+
+3.2 Decoder:
+Also 6 layers, but adds a third sublayer: cross-attention over the encoder output. Self-attention is masked so position i can only see positions ≤ i. This prevents seeing the future during generation.
+
+3.2.1 Scaled Dot-Product Attention:
+(see equation in the paper)
+We divide by √d_k because dot products grow with dimension, pushing softmax into tiny-gradient regions. Scaling keeps variance at 1.
+
+3.2.2 Multi-Head Attention:
+Instead of one attention, project Q, K, V h times into lower-dimensional subspaces, run attention in parallel, then concatenate and project. Each head learns a different relationship (syntax, semantics, position) at the same parameter cost.
+
+3.4 Embeddings + Positional Encoding:
+Attention has no inherent order. Positional encodings (sine/cosine) are added to embeddings to inject sequence position.
+
+3.5 Position-wise Feed-Forward:
+Two linear layers with ReLU, applied identically to each position: FFN(x) = max(0, xW₁ + b₁)W₂ + b₂. Inner dimension d_ff = 2048.

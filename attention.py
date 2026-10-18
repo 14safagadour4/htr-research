@@ -19,7 +19,7 @@ class SingleHeadAttention(nn.Module):
         scores = torch.matmul(Q, K.transpose(-2, -1))
         scores = scores / math.sqrt(Q.size(-1))
         if mask is not None:
-            scores = scores.masked_fill(mask, float('-inf'))
+            scores = scores.masked_fill(mask[:, None, :], float('-inf'))
         attn_weights = F.softmax(scores, dim=-1)
         output = torch.matmul(attn_weights, V)
         return output, attn_weights
