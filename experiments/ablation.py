@@ -177,7 +177,7 @@ def main():
     results = {}
     for kind in ["full", "no_pos", "no_ffn", "no_residual"]:
         loss, em = run_variant(kind, src_ids, tgt_in, tgt_lab, src_pad, causal, steps=600)
-        results[kind] = (los s, em)
+        results[kind] = (loss, em)
         print(f"{kind:<13s} final loss = {loss:7.4f}   "
               f"exact-match (32) = {em * 100:5.1f}%")
 
@@ -186,7 +186,6 @@ def main():
     for kind, (loss, em) in results.items():
         print(f"  {kind:<13s} → {em * 100:5.1f}%")
     print("=" * 64)
-
 
 if __name__ == "__main__":
     main()
