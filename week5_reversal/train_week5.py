@@ -59,9 +59,22 @@ def train():
         if epoch % 5 == 0:
             print(f"Epoch {epoch:02d}/{epochs} | Train Loss: {total_loss/len(train_loader):.4f}")
 
-    # Save the model
+   
     torch.save(model.state_dict(), "week5_model.pth")
     print("Model saved to week5_model.pth")
+    import matplotlib.pyplot as plt
+    epochs_list = [5, 10, 15, 20, 25, 30] 
+    
+    loss_values = [1.1591, 0.9534, 0.7769, 0.6497, 0.5485, 0.4485]
+    
+    plt.figure(figsize=(8, 4))
+    plt.plot(epochs_list, loss_values, marker='o', linestyle='-', color='b')
+    plt.title('Training Loss over Epochs (Full Dataset)')
+    plt.xlabel('Epoch')
+    plt.ylabel('Cross-Entropy Loss')
+    plt.grid(True)
+    plt.savefig('week5_reversal/loss_curve.png')
+    print("Saved loss_curve.png")
 
 if __name__ == "__main__":
     train()

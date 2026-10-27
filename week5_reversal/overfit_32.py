@@ -35,5 +35,8 @@ def overfit():
 
     print("Overfit complete. The loss should be near 0.000.")
 
+    torch.save(model.state_dict(), "overfit_model.pth")
+    print("Model saved to overfit_model.pth")
+    
 if __name__ == "__main__":
     overfit()
