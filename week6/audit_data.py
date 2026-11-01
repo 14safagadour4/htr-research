@@ -1,21 +1,32 @@
+import os
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+import pandas as pd
 from datasets import load_dataset
-from PIL import Image
 
-print("Downloading/loading IAM dataset (line-level)...")
 
-dataset = load_dataset("Teklia/IAM-line", split="train")
+print("Loading IAM dataset (Line-level for this pilot)...")
+# Teklia/IAM-line is a standard, clean HuggingFace dataset for IAM
+dataset = load_dataset("Teklia/IAM-line", split="validation") 
 
-print(f"\nTotal training samples: {len(dataset)}")
-print("Dataset structure:", dataset.features)
+# Freeze the first 100 samples to keep evaluation fast this week
+frozen_subset = dataset.select(range(100))
 
-# Inspect the first 3 samples
-for i in range(3):
-    example = dataset[i]
-    print(f"\n--- Sample {i} ---")
-    print(f"Text: {example['text']}")
-    print(f"Image size: {example['image'].size}")
+os.makedirs("week6/data", exist_ok=True)
+manifest = []
+
+print("Saving 100 images to week6/data/...")
+for i, example in enumerate(frozen_subset):
+    # Save the image locally
+    img_path = f"week6/data/sample_{i}.png"
+    example['image'].save(img_path)
     
-    # Save the first image locally so you can view it
-    if i == 0:
-        example['image'].save("week6/sample_iam.png")
-        print("Saved first sample image to week6/sample_iam.png")
+    # Add to manifest
+    manifest.append({
+        "sample_id": i,
+        "image_path": img_path,
+        "reference_text": example['text']
+    })
+
+df = pd.DataFrame(manifest)
+df.to_csv("week6/data/frozen_manifest.csv", index=False)
+print("SUCCESS: Saved frozen_manifest.csv with 100 samples.")
